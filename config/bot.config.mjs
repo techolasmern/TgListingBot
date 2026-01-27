@@ -6,6 +6,10 @@ import { autoRetry } from "@grammyjs/auto-retry";
 
 export const bot = new Bot(app_config.BOT.TOKEN);
 
+bot.catch(err => {
+    console.log(err.message);
+})
+
 export const api = bot.api;
 
 bot.api.config.use(autoRetry());
