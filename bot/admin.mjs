@@ -85,7 +85,7 @@ bot.command("dev", async ctx => {
         }
 
         // Standard response for non-admins
-        return ctx.reply(`<b>🎟️ Our Admin/Dev: @${app_config.ADMIN.USERNAME}</b>`, options);
+        return ctx.reply(`<b>🎟️ Our Admin/Dev: @${admin.username}</b>`, options);
 
     } catch (err) {
         console.error(err);

@@ -1,8 +1,4 @@
 export const app_config = {
-    ADMIN: {
-        ID: process.env.ADMIN_ID,
-        USERNAME: process.env.ADMIN_USERNAME
-    },
     BOT: {
         USERNAME: process.env.BOT_USERNAME,
         TOKEN: process.env.BOT_TOKEN
