@@ -414,7 +414,7 @@ export const adminManageUser = async (conversation, ctx) => {
             `<b>🛠️ USER SEARCH SYSTEM</b>\n\n` +
             `<i>Please send the Telegram ID of the user you wish to inspect.</i>\n\n` +
             `👉 <b>/cancel</b> to abort`,
-            { parse_mode: "HTML" }
+            options
         );
 
         let user;
@@ -455,7 +455,7 @@ export const adminManageUser = async (conversation, ctx) => {
         ];
 
         return await ctx.reply(report, {
-            parse_mode: "HTML",
+            ...options,
             reply_markup: { inline_keyboard: keyboard }
         });
 
@@ -481,7 +481,7 @@ export const adminManageAsset = async (conversation, ctx) => {
             `<b>🛠️ ASSET SEARCH SYSTEM</b>\n\n` +
             `<i>Please send the username of the asset you wish to inspect.</i>\n\n` +
             `👉 Type <b>/cancel</b> to abort`,
-            { parse_mode: "HTML" }
+            options
         );
 
         while (true) {
@@ -489,7 +489,7 @@ export const adminManageAsset = async (conversation, ctx) => {
             const { message } = await conversation.wait();
 
             if (!message?.text) {
-                await ctx.reply("<b>⚠️ Invalid Input:</b> Please send a text username.", { parse_mode: "HTML" });
+                await ctx.reply("<b>⚠️ Invalid Input:</b> Please send a text username.", options);
                 continue;
             }
 
@@ -497,7 +497,7 @@ export const adminManageAsset = async (conversation, ctx) => {
 
             // 3. Exit Condition
             if (input.toLowerCase() === "/cancel") {
-                return await ctx.reply("<b>❌ Process Cancelled</b>", { parse_mode: "HTML" });
+                return await ctx.reply("<b>❌ Process Cancelled</b>", options);
             }
 
             // 4. Database Query (Cleaning the '@' if provided)
@@ -509,7 +509,7 @@ export const adminManageAsset = async (conversation, ctx) => {
             if (!asset) {
                 await ctx.reply(
                     `<b>🔎 Asset "@${cleanUsername}" not found.</b>\nPlease try again or type /cancel:`,
-                    { parse_mode: "HTML" }
+                    options
                 );
                 continue;
             }
@@ -539,7 +539,7 @@ export const adminManageAsset = async (conversation, ctx) => {
 
             // 6. Action Buttons
             return await ctx.reply(details, {
-                parse_mode: "HTML",
+                ...options,
                 reply_markup: {
                     inline_keyboard: [
                         [
@@ -575,20 +575,18 @@ export const adminMail = async (conversation, ctx) => {
             `Please <b>send</b> or <b>forward</b> the message you want to broadcast.\n\n` +
             `<i>Supports: Text, Photos, Videos, and Stickers.</i>\n` +
             `👉 <b>/cancel</b> to abort`,
-            { parse_mode: "HTML" }
+            options
         );
 
         let broadcastMsg;
         while (true) {
-            // Wait for any type of message
-            const { message } = await conversation.wait();
+            
+            const { message } = await conversation.waitFor("message");
 
-            // Handle Cancel
             if (message?.text === "/cancel") {
-                return await ctx.reply("<b>❌ Process Cancelled</b>", { parse_mode: "HTML" });
+                return await ctx.reply("<b>❌ Process Cancelled</b>", options);
             }
 
-            // Validate that we actually have a message to copy
             if (!message) {
                 await ctx.reply("<b>⚠️ Error:</b> I couldn't process that message. Please try again.");
                 continue;
@@ -598,18 +596,15 @@ export const adminMail = async (conversation, ctx) => {
             break;
         }
 
-        // 3. Preview Logic
-        await ctx.reply("<b>👇 PREVIEW OF BROADCAST:</b>", { parse_mode: "HTML" });
+        await ctx.reply("<b>👇 PREVIEW OF BROADCAST:</b>", options);
 
-        // Use copyMessage so the admin sees exactly what users will see
         await ctx.copyMessage(ctx.from.id, {
             from_chat_id: broadcastMsg.chat.id,
             message_id: broadcastMsg.message_id,
         });
 
-        // 4. Confirmation Menu
         await ctx.reply("<b>⬆️ Above is your preview.</b>\n\nAre you sure you want to broadcast this to all users?", {
-            parse_mode: "HTML",
+            ...options,
             reply_markup: {
                 inline_keyboard: [
                     [

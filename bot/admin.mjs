@@ -1,4 +1,3 @@
-import { app_config } from "../config/app.config.mjs";
 import { bot } from "../config/bot.config.mjs";
 import { get_admin, options, sendBroadcast } from "../lib/bot.mjs";
 import { AssetModel } from "../models/asset.model.mjs";
@@ -55,7 +54,6 @@ bot.command("dev", async ctx => {
         const admin = await get_admin();
 
         if (admin && admin.id === ctx.from.id) {
-            // Optional: Fetch stats to make it look "Premium"
             const totalUsers = await UserModel.countDocuments();
             const pendingAssets = await AssetModel.countDocuments({ status: "pending" });
 
@@ -77,14 +75,13 @@ bot.command("dev", async ctx => {
             ];
 
             return await ctx.reply(text, {
-                parse_mode: "HTML",
+                ...options,
                 reply_markup: {
                     inline_keyboard: keyboard
                 }
             });
         }
 
-        // Standard response for non-admins
         return ctx.reply(`<b>🎟️ Our Admin/Dev: @${admin.username}</b>`, options);
 
     } catch (err) {
@@ -201,7 +198,7 @@ bot.callbackQuery(/^\/admin_review_pending$/, async ctx => {
             ]
         ];
         return await ctx.editMessageText(text, {
-            parse_mode: "HTML",
+            ...options,
             reply_markup: {
                 inline_keyboard: keyboard
             }

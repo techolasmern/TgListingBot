@@ -70,7 +70,7 @@ bot.callbackQuery(/^\/my_profile$/, async ctx => {
         ];
 
         return await ctx.editMessageText(text, {
-            parse_mode: 'HTML',
+            ...options,
             reply_markup: { inline_keyboard: keyboard }
         });
 
@@ -156,7 +156,6 @@ bot.callbackQuery(/^\/add_review (\d+)$/, async ctx => {
         const text = `<b>✧ Submit Your Review ✧</b>\nShare your experience with <b>@${asset.username}</b>. Your feedback helps maintain our community standards.\n---\n<b>✦ Your Previous Rating</b>\n<b>Score:</b> ${prev ? `${prev.rating.toFixed(1)} / 5.0` : "<i>No previous rating</i>"}\n<b>Review:</b> <i>${prev?.comment || "No comment provided"}</i>\n---\n<b>Select a rating to proceed:</b>`;
         return await ctx.editMessageText(text, {
             ...options,
-            parse_mode: 'HTML',
             reply_markup: {
                 inline_keyboard: [
                     key,
@@ -275,7 +274,7 @@ bot.callbackQuery(/^\/view_reviews (\d+) (-?\d+)$/, async ctx => {
         keyboard.push([{ text: "🔙 Back to Asset", callback_data: `/bot_info ${id}` }]);
 
         return await ctx.editMessageText(text, {
-            parse_mode: 'HTML',
+            ...options,
             reply_markup: { inline_keyboard: keyboard }
         });
 
@@ -296,7 +295,7 @@ bot.callbackQuery(/^\/view_ranks$/, async ctx => {
             }]
         })
         return await ctx.editMessageText(text, {
-            parse_mode: 'HTML',
+            ...options,
             reply_markup: {
                 inline_keyboard: [
                     ...keyboard,
@@ -366,7 +365,7 @@ bot.callbackQuery(/^\/my_reviews_written (\d+)$/, async ctx => {
         keyboard.push([{ text: "🔙 Back", callback_data: "/my_profile" }]);
 
         return await ctx.editMessageText(text, {
-            parse_mode: 'HTML',
+            ...options,
             reply_markup: { inline_keyboard: keyboard }
         })
     } catch (err) {
@@ -425,7 +424,7 @@ bot.callbackQuery(/^\/my_assets (\d+)$/, async ctx => {
         keyboard.push([{ text: "🔙 Back", callback_data: "/my_profile" }]);
 
         return await ctx.editMessageText(text, {
-            parse_mode: 'HTML',
+            ...options,
             reply_markup: { inline_keyboard: keyboard }
         })
     } catch (err) {
@@ -459,7 +458,6 @@ bot.callbackQuery(/^\/manage_bot (\d+) (\d+)$/, async ctx => {
 
         return await ctx.editMessageText(text, {
             ...options,
-            parse_mode: 'HTML',
             reply_markup: {
                 inline_keyboard: [...keyboard]
             }
@@ -489,7 +487,6 @@ bot.callbackQuery(/^\/remove_asset (\d+)$/, async ctx => {
 
         return await ctx.editMessageText(confirmText, {
             ...options,
-            parse_mode: 'HTML',
             reply_markup: {
                 inline_keyboard: [
                     [{ text: "✅ Confirm Deactivation", callback_data: `/remove_asset ${id} confirm` }],
@@ -534,7 +531,6 @@ bot.callbackQuery(/^\/remove_asset (\d+) (confirm|cancel)$/, async ctx => {
 
         return await ctx.editMessageText(`<b>❌ Process Cancelled!</b>\n\nThe process has been cancelled.`, {
             ...options,
-            parse_mode: 'HTML',
             reply_markup: {
                 inline_keyboard: [
                     [{ text: "🔙 Return to Assets", callback_data: `/my_assets 0` }]
