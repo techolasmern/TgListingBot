@@ -7,7 +7,8 @@
     "type": "module",
     "main": "app.mjs",
     "scripts": {
-        "start": "nodemon --env-file=.env app.mjs"
+        "dev": "nodemon --env-file=.env.dev",
+        "start": "node app.mjs"
     },
     "dependencies": {
         "@grammyjs/auto-retry": "^2.0.2",
