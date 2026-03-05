@@ -1,3 +1,6 @@
+import env from "dotenv"
+env.config()
+
 export const app_config = {
     BOT: {
         USERNAME: process.env.BOT_USERNAME,

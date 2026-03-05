@@ -1,4 +1,6 @@
 import { connect } from "mongoose";
+import env from "dotenv"
+env.config()
 
 export const db = {
     config: async () => {

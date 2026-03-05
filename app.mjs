@@ -1,6 +1,8 @@
 import express from "express";
 import { db } from "./config/db.config.mjs";
 import "./bot/main.mjs";
+import env from "dotenv"
+env.config()
 
 await db.config();
 const app = express();
